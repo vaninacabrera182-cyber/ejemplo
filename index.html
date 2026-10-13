@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio HTML + CSS</title>
+  <style>
+    :root{
+      --azul:#2563eb; --azul2:#1d4ed8; --oscuro:#172033; --claro:#f4f7fb;
+      --blanco:#fff; --borde:#d9e2ef; --verde:#16a34a; --amarillo:#fff7d6;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--claro);color:var(--oscuro)}
+    header{background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:white;padding:36px 20px;text-align:center}
+    header h1{margin:0 0 8px;font-size:clamp(28px,5vw,46px)}
+    header p{margin:0;opacity:.95}
+    .container{width:min(1100px,92%);margin:24px auto 60px}
+    .datos,.actividad{background:white;border:1px solid var(--borde);border-radius:18px;padding:20px;margin-bottom:22px;box-shadow:0 8px 24px rgba(25,45,80,.08)}
+    .datos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    label{font-weight:bold;display:block;margin-bottom:6px}
+    input{width:100%;padding:11px;border:1px solid #bcc9da;border-radius:10px;font-size:16px}
+    .actividad h2{margin-top:0;color:var(--azul2)}
+    .objetivo{background:#eef5ff;border-left:5px solid var(--azul);padding:12px;border-radius:8px;margin:12px 0}
+    .editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    .panel h3{margin:0 0 8px}
+    textarea{width:100%;min-height:230px;background:#101827;color:#e5eefc;border:0;border-radius:12px;padding:14px;font:14px/1.5 Consolas,monospace;resize:vertical}
+    iframe{width:100%;height:230px;border:2px solid #dbe4f0;border-radius:12px;background:white}
+    .botones{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    button{border:0;border-radius:10px;padding:10px 14px;font-weight:bold;cursor:pointer;background:var(--azul);color:white}
+    button:hover{filter:brightness(.95)}
+    .sec{background:#475569}.sol{background:#7c3aed}.reset{background:#dc2626}
+    .caja-info{display:none;padding:12px;border-radius:10px;margin:10px 0;background:var(--amarillo);border:1px solid #f0d978}
+.feedback{display:none;padding:12px;border-radius:10px;margin:10px 0;font-weight:bold}
+.feedback.ok{display:block;background:#dcfce7;border:1px solid #86efac;color:#166534}
+.feedback.no{display:block;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b}
+    .solucion{background:#f2ebff;border-color:#c8b5f8}
+    code{background:#edf2f7;padding:2px 5px;border-radius:5px}
+    .final{border:2px solid #7c3aed}
+.resultado-final{background:linear-gradient(135deg,#eef5ff,#f5efff);border:2px solid #7c3aed;text-align:center}
+.resultado-final .porcentaje{font-size:54px;font-weight:800;margin:12px 0;color:#1d4ed8}
+.resultado-final .nivel{font-size:25px;font-weight:800;margin:8px 0}
+.resultado-final .detalle{color:#475569;margin-top:8px}
+    footer{text-align:center;color:#64748b;padding:20px}
+    @media(max-width:760px){.datos-grid,.editor-grid{grid-template-columns:1fr} textarea,iframe{min-height:260px}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>💻 Laboratorio HTML + CSS</h1>
+  <p>Aprendé practicando: escribí código, comprobalo y mirá el resultado al instante.</p>
+</header>
+
+<main class="container">
+  <section class="datos">
+    <h2>👩‍💻 Datos del alumno</h2>
+    <div class="datos-grid">
+      <div><label>Nombre</label><input placeholder="Tu nombre"></div>
+      <div><label>Apellido</label><input placeholder="Tu apellido"></div>
+      <div><label>Curso</label><input placeholder="Ej.: 3° A"></div>
+    </div>
+  </section>
+
+  <div id="actividades"></div>
+
+  <section class="actividad final">
+    <h2>🏆 Desafío final — Creá tu propia tarjeta</h2>
+    <p>Creá una tarjeta sobre vos, un personaje, un videojuego, una banda o un tema que te guste.</p>
+    <div class="objetivo"><strong>Debe incluir:</strong> al menos un <code>div</code>, una <code>class</code>, color de texto, fondo, tamaño y tipo de letra, borde, margin y padding.</div>
+    <div class="editor-grid">
+      <div class="panel"><h3>✍️ Tu código</h3><textarea id="finalCode"><div class="mi-tarjeta">
+  <h2>Mi tarjeta</h2>
+  <p>Escribí acá algo sobre vos.</p>
+</div>
+
+<style>
+.mi-tarjeta {
+  /* Completá el diseño */
+}
+</style></textarea>
+        <div class="botones"><button onclick="preview('finalCode','finalPreview')">▶ Ver resultado</button></div>
+      </div>
+      <div class="panel"><h3>👀 Vista previa</h3><iframe id="finalPreview" title="Vista previa desafío final"></iframe></div>
+    </div>
+  </section>
+
+  <section class="actividad resultado-final">
+    <h2>📊 Resultado final</h2>
+    <p>Cuando termines las 10 actividades, presioná el botón para conocer tu resultado.</p>
+    <button onclick="resultadoFinal()">🏁 Ver mi resultado final</button>
+    <div id="resultadoFinal" style="display:none">
+      <div class="porcentaje" id="porcentajeFinal">0%</div>
+      <div class="nivel" id="nivelFinal"></div>
+      <div class="detalle" id="detalleFinal"></div>
+    </div>
+    <div class="objetivo" style="text-align:left;margin-top:18px">
+      <strong>Niveles de desempeño:</strong><br>
+      🔴 Inicial: 0% a 49%<br>
+      🟡 En proceso: 50% a 79%<br>
+      🟢 Logrado: 80% a 100%
+    </div>
+  </section>
+</main>
+
+<footer>Práctica de HTML y CSS • Aprender haciendo 🚀</footer>
+
+<script>
+const correctas = new Array(10).fill(false);
+
+const actividades = [
+{titulo:"1. DIV — Creando una caja",consigna:"Completá las etiquetas que faltan para crear un div que contenga el título y el párrafo.",codigo:`<____>
+  <h2>Mi primera caja</h2>
+  <p>Estoy practicando HTML.</p>
+</____>`,pista:"La etiqueta contenedora comienza con <div> y termina con la misma etiqueta precedida por /.",solucion:""},
+{titulo:"2. CLASS — Ponerle un nombre a un elemento",consigna:"Completá el atributo para que el div tenga una class llamada tarjeta.",codigo:`<div ______="tarjeta">
+  <h2>Mi tarjeta</h2>
+  <p>Estoy aprendiendo CSS.</p>
+</div>
+<style>
+.tarjeta { padding: 20px; }
+</style>`,pista:"El atributo que permite asignar una clase se escribe dentro de la etiqueta de apertura.",solucion:""},
+{titulo:"3. COLOR — Color del texto",consigna:"Completá la propiedad CSS para que el título sea azul.",codigo:`<h2 class="titulo">Un título con color</h2>
+<style>
+.titulo { __________: blue; }
+</style>`,pista:"La propiedad significa literalmente «color».",solucion:""},
+{titulo:"4. BACKGROUND-COLOR — Fondo",consigna:"Completá la propiedad para que la caja tenga fondo lightblue.",codigo:`<div class="caja">¡Quiero un fondo de color!</div>
+<style>
+.caja {
+  __________________: lightblue;
+  padding: 20px;
+}
+</style>`,pista:"La propiedad tiene dos palabras: background-...",solucion:""},
+{titulo:"5. FONT-SIZE — Tamaño de letra",consigna:"Completá la propiedad para que el título mida 36px.",codigo:`<h1 class="titulo">Título grande</h1>
+<style>
+.titulo { __________: 36px; }
+</style>`,pista:"Comienza con font- y la segunda palabra significa tamaño.",solucion:""},
+{titulo:"6. FONT-FAMILY — Tipo de letra",consigna:"Completá la propiedad para usar Georgia.",codigo:`<p class="texto">Estoy cambiando mi tipo de letra.</p>
+<style>
+.texto {
+  _____________: Georgia, serif;
+  font-size: 22px;
+}
+</style>`,pista:"Comienza con font- y permite elegir la familia tipográfica.",solucion:""},
+{titulo:"7. BORDER — Bordes",consigna:"Escribí la propiedad para crear un borde de 3px sólido y azul.",codigo:`<div class="cuadro">Quiero tener un borde</div>
+<style>
+.cuadro {
+  __________: 3px solid blue;
+  padding: 20px;
+}
+</style>`,pista:"La propiedad del borde se escribe con una sola palabra en inglés.",solucion:""},
+{titulo:"8. MARGIN — Espacio por fuera",consigna:"Completá la propiedad que crea 30px de espacio POR FUERA.",codigo:`<p>Elemento de arriba</p>
+<div class="caja">Necesito espacio exterior</div>
+<p>Elemento de abajo</p>
+<style>
+.caja {
+  background-color: #fde68a;
+  __________: 30px;
+}
+</style>`,pista:"Margin = espacio exterior; padding = espacio interior.",solucion:""},
+{titulo:"9. PADDING — Espacio por dentro",consigna:"Completá la propiedad que crea 30px ENTRE el texto y el borde.",codigo:`<div class="caja">Necesito espacio interior.</div>
+<style>
+.caja {
+  border: 2px solid black;
+  background-color: #dcfce7;
+  __________: 30px;
+}
+</style>`,pista:"Necesitás espacio DENTRO de la caja.",solucion:""},
+{titulo:"10. DESAFÍO INTEGRADOR",consigna:"Completá TODOS los espacios usando class, color, fondo, tamaño y tipo de letra, borde, margin y padding.",codigo:`<div class="________">
+  <h2>Mi tarjeta final</h2>
+  <p>¡Estoy aprendiendo HTML y CSS!</p>
+</div>
+<style>
+.tarjeta-final {
+  color: __________;
+  background-color: __________;
+  font-size: ______;
+  font-family: __________;
+  border: ____________________;
+  margin: ______;
+  padding: ______;
+}
+</style>`,pista:"Hacé coincidir la class con .tarjeta-final y elegí valores válidos. No deben quedar guiones bajos.",solucion:""}
+];
+
+const cont = document.getElementById("actividades");
+
+actividades.forEach((a,i)=>{
+ const n=i+1, id=`code${n}`, prev=`prev${n}`, pista=`pista${n}`, sol=`sol${n}`;
+ const section=document.createElement("section");
+ section.className="actividad";
+ section.innerHTML=`
+   <h2>${a.titulo}</h2>
+   <p>${a.consigna}</p>
+   <div class="botones">
+     <button class="sec" onclick="showHint('${pista}')">💡 Necesito una pista</button>
+     <button onclick="checkCode(${i},'${id}','feedback${n}')">🔎 Comprobar mi código</button>
+     <button class="reset" onclick="resetCode(${i},'${id}','${prev}','feedback${n}')">↺ Reiniciar</button>
+   </div>
+   <div class="caja-info" id="${pista}"><strong>⚠️ Antes de mirar:</strong> intentá resolverlo por tu cuenta.<br><br>${a.pista}</div>
+   <div class="feedback" id="feedback${n}"></div>
+   <div class="editor-grid">
+     <div class="panel"><h3>✍️ Código</h3><textarea id="${id}"></textarea>
+       <div class="botones"><button onclick="preview('${id}','${prev}')">▶ Ver resultado</button></div>
+     </div>
+     <div class="panel"><h3>👀 Vista previa</h3><iframe id="${prev}" title="Vista previa"></iframe></div>
+   </div>`;
+ cont.appendChild(section);
+ document.getElementById(id).value=a.codigo;
+ setTimeout(()=>preview(id,prev),0);
+});
+
+function preview(codeId, frameId){
+ const code=document.getElementById(codeId).value;
+ const frame=document.getElementById(frameId);
+ frame.srcdoc=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;padding:18px}</style></head><body>${code}</body></html>`;
+}
+function showHint(id){
+ const el=document.getElementById(id);
+ if(el.style.display==="block"){ el.style.display="none"; return; }
+ if(confirm("⚠️ ¿Seguro que querés ver una pista?\n\nPrimero intentá resolver la actividad por tu cuenta. La pista orienta, pero no muestra la solución.")){
+   el.style.display="block";
+ }
+}
+function checkCode(index,codeId,feedbackId){
+ const code=document.getElementById(codeId).value.toLowerCase();
+ const f=document.getElementById(feedbackId);
+ const checks=[
+   [/<div\s*>[\s\S]*<\/div\s*>/],
+   [/class\s*=\s*["']tarjeta["']/, /\.tarjeta\s*\{/],
+   [/color\s*:\s*blue\s*;/],
+   [/background-color\s*:\s*lightblue\s*;/],
+   [/font-size\s*:\s*36px\s*;/],
+   [/font-family\s*:\s*georgia\s*,\s*serif\s*;/],
+   [/border\s*:\s*3px\s+solid\s+blue\s*;/],
+   [/margin\s*:\s*30px\s*;/],
+   [/padding\s*:\s*30px\s*;/],
+   [/<div[^>]*class\s*=/, /color\s*:/, /background-color\s*:/, /font-size\s*:/, /font-family\s*:/, /border\s*:/, /margin\s*:/, /padding\s*:/]
+ ];
+ const hasPlaceholder = /_{2,}|<____>|<\/____>/.test(document.getElementById(codeId).value);
+ const ok=!hasPlaceholder && checks[index].every(r=>r.test(code));
+ correctas[index]=ok;
+ f.className="feedback "+(ok?"ok":"no");
+ f.textContent=ok
+   ?"✅ ¡Muy bien! Tu código contiene los elementos principales pedidos. Mirá también la vista previa y comprobá que el diseño sea el que buscabas."
+   :"🔧 Todavía falta algo de la consigna. Revisá tu código, probá nuevamente y usá la pista solo si la necesitás.";
+ preview(codeId,"prev"+(index+1));
+}
+function resetCode(index,codeId,frameId,feedbackId){
+ correctas[index]=false;
+ document.getElementById(codeId).value=actividades[index].codigo;
+ document.getElementById(feedbackId).className="feedback";
+ document.getElementById(feedbackId).textContent="";
+ preview(codeId,frameId);
+}
+function resultadoFinal(){
+ const aciertos=correctas.filter(Boolean).length;
+ const porcentaje=aciertos*10;
+ let nivel="", mensaje="";
+ if(porcentaje < 50){
+   nivel="🔴 Nivel: INICIAL";
+   mensaje="Seguí practicando. Revisá las actividades que todavía no pudiste comprobar correctamente.";
+ } else if(porcentaje < 80){
+   nivel="🟡 Nivel: EN PROCESO";
+   mensaje="¡Vas muy bien! Ya comprendiste varios conceptos. Revisá los ejercicios pendientes.";
+ } else {
+   nivel="🟢 Nivel: LOGRADO";
+   mensaje="¡Excelente trabajo! Lograste aplicar correctamente la mayoría de los conceptos de HTML y CSS.";
+ }
+ document.getElementById("resultadoFinal").style.display="block";
+ document.getElementById("porcentajeFinal").textContent=porcentaje+"%";
+ document.getElementById("nivelFinal").textContent=nivel;
+ document.getElementById("detalleFinal").textContent="Actividades comprobadas correctamente: "+aciertos+" de 10. "+mensaje;
+ document.getElementById("resultadoFinal").scrollIntoView({behavior:"smooth",block:"center"});
+}
+preview("finalCode","finalPreview");
+</script>
+</body>
+</html>
